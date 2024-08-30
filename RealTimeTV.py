@@ -5,24 +5,26 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 import os
 
-gestures = {"testdata\\Call_Me": "call me",
-            "testdata\\Close": "fist",
-            "testdata\\Live_Long": "live long",
-            "testdata\\OK": "okay",
-            "testdata\\Peace": "peace",
-            "testdata\\Rock": "rock",
-            "testdata\\Smile": "smile",
-            "testdata\\Stop": "stop",
-            "testdata\\Thumbs_Down": "thumbs down",
-            "testdata\\Thumbs_Up": "thumbs up"}
+gestures = {"videodata\\Close":"fist",
+            "videodata\\Thumbs_Up":"thumbs up",
+            "videodata\\Thumbs_Down":"thumbs down",
+            "videodata\\Peace":"peace",
+            "videodata\\Rock":"rock",
+            "videodata\\OK":"okay",
+            "videodata\\Call_Me":"call me",
+            "videodata\\Smile":"smile",
+            "videodata\\Stop":"stop",
+            "videodata\\Live_Long":"live long"}
+
 
 rezultati = {}
 correct_all = 0
 wrong_all = 0
+one_frame = 0
 
 # Initialize Mediapipe
 mpHands = mp.solutions.hands
-hands = mpHands.Hands(static_image_mode=True, max_num_hands=1, min_detection_confidence=0.5)
+hands = mpHands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.5)
 mpDraw = mp.solutions.drawing_utils
 
 # Load the gesture recognizer model
@@ -68,6 +70,9 @@ for key, value in gestures.items():
                 prediction = model.predict([landmarks])
                 classID = np.argmax(prediction)
                 className = classNames[classID]
+                one_frame = 0
+        else:
+            one_frame += 1
 
         # cv2.putText(frame, className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX,
         #            1, (0, 0, 255), 2, cv2.LINE_AA)
@@ -75,9 +80,11 @@ for key, value in gestures.items():
         # if cv2.waitKey(0) == ord('q'):
         #     continue
 
-        if className == value:
+        if className == value and one_frame <= 1:
             correct += 1
             correct_all += 1
+        elif one_frame > 1:
+            continue
         else:
             wrong += 1
             wrong_all += 1
