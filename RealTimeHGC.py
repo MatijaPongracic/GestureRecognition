@@ -21,12 +21,10 @@ wrong_all = 0
 prev_gesture = None
 one_frame = 0
 
-# Define global variables
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 
-# Desired dimensions for displaying images
 DESIRED_HEIGHT = 480
 DESIRED_WIDTH = 480
 

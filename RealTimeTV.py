@@ -22,12 +22,10 @@ correct_all = 0
 wrong_all = 0
 one_frame = 0
 
-# Initialize Mediapipe
 mpHands = mp.solutions.hands
 hands = mpHands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.5)
 mpDraw = mp.solutions.drawing_utils
 
-# Load the gesture recognizer model
 model = load_model('mp_hand_gesture')
 
 # Load class names
@@ -35,26 +33,18 @@ with open("gesture.names", "r") as f:
     classNames = f.read().split('\n')
 
 for key, value in gestures.items():
-    # Get list of all images in the test data directory
     image_files = [f for f in os.listdir(key) if os.path.isfile(os.path.join(key, f))]
     correct = 0
     wrong = 0
     for image_file in image_files:
-        # Read each image from the directory
         image_path = os.path.join(key, image_file)
         frame = cv2.imread(image_path)
-
         x, y, c = frame.shape
-
-        # Flip the frame vertically
         framergb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-        # Get hand landmark prediction
         result = hands.process(framergb)
-
         className = ''
 
-        # Post process the result
         if result.multi_hand_landmarks:
             landmarks = []
             for handslms in result.multi_hand_landmarks:
@@ -63,10 +53,8 @@ for key, value in gestures.items():
                     lmy = int(lm.y * y)
                     landmarks.append([lmx, lmy])
 
-                # Draw landmarks on the image
                 # mpDraw.draw_landmarks(frame, handslms, mpHands.HAND_CONNECTIONS)
 
-                # Predict gesture
                 prediction = model.predict([landmarks])
                 classID = np.argmax(prediction)
                 className = classNames[classID]
