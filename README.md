@@ -4,4 +4,4 @@ U repozitoriju se nalaze kôdovi korišteni u završnom radu za usporedbu točno
 - MediaPipe HandGestureClassifier
 - vlastito izrađeni model
 
-Skipte s početnim nazivom "Photo" testiraju točnost na statičnim slikama, a s početnim nazivom "RealTime" na kadrovima videosekvence.
+Skripte s početnim nazivom "Photo" testiraju točnost na statičnim slikama, a s početnim nazivom "RealTime" na kadrovima videosekvence.
